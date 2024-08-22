@@ -17,6 +17,6 @@ export const findUserById = async (req: Request, res: Response) => {
         const user = await findUser(req.params.id);
         res.status(200).json(user);
     } catch (error: any) {
-        res.status(500).json({ message: error.message });
+        handleError(error, res);
     }
 };

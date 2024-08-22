@@ -21,14 +21,22 @@ model User {
   Questionnaire Questionnaire[]
 }
 
+enum Status {
+  NEW
+  DRAFT
+  ACTIVE
+  INACTIVE
+}
+
 model Questionnaire {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User @relation(fields: [userId], references: [id])
-  obj       Json
-  testUrl   String
-  pubUrl    String
-  createdAt DateTime @default(now())
-  modifiedAt DateTime @default(now())
-  active    Boolean
+  id         String   @id @default(cuid())
+  name       String   @default("Untitled Questionnaire")
+  userId     String
+  user       User @relation(fields: [userId], references: [id])
+  obj        Json
+  testUrl    String   @default("")
+  pubUrl     String   @default("")
+  createdAt  DateTime @default(now())
+  modifiedAt DateTime @updatedAt
+  status     Status   @default(NEW)
 }
