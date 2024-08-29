@@ -80,3 +80,11 @@ export const updateById = async (id: string, questionnaireData: {
 
     return questionnaire;
 };
+
+export const deleteById = async (id: string): Promise<Questionnaire> => {
+    return await prisma.questionnaire.delete({
+        where: {
+            id
+        }
+    });
+};

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { create, findAll, findById, findByUser, findByUserWithoutObj, updateById } from '../services/questionnaire-service.js';
+import { create, deleteById, findAll, findById, findByUser, findByUserWithoutObj, updateById } from '../services/questionnaire-service.js';
 import { handleError } from '../utils/error-handler.js';
 
 // create questionnaire
@@ -65,6 +65,17 @@ export const updateQuestionnaireById = async (req: Request, res: Response) => {
 
         const updatedQuestionnaire = await updateById(id, { name, userId, obj, testUrl, pubUrl, status });
         res.status(200).json(updatedQuestionnaire);
+    } catch (error) {
+        handleError(error, res);
+    }
+};
+
+//delete questionnaire
+export const deleteQuestionnaireById = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id;
+        await deleteById(id);
+        res.status(204).end();
     } catch (error) {
         handleError(error, res);
     }
