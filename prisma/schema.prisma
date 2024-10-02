@@ -19,6 +19,12 @@ model User {
   name  String?
 
   Questionnaire Questionnaire[]
+
+  DesignTemplate DesignTemplate[]
+
+  UserGroup UserGroup[]
+
+  UserRole UserRole[]
 }
 
 enum Status {
@@ -26,6 +32,13 @@ enum Status {
   DRAFT
   ACTIVE
   INACTIVE
+}
+
+enum Role {
+  ADMIN // Can do anything(create questionnaire, add logics, create template, assign roles, create reports, etc)
+  DESIGNER // Can edit questionnaire, add logics, create template, create reports, can duplicate a survey
+  QA // Can view questionnaire, create reports
+  ANALYST // Can create/view reports
 }
 
 model Questionnaire {
@@ -39,4 +52,46 @@ model Questionnaire {
   createdAt  DateTime @default(now())
   modifiedAt DateTime @updatedAt
   status     Status   @default(NEW)
+  templateId String?
+  template   DesignTemplate? @relation(fields: [templateId], references: [id])
+
+  UserGroupQuestionnaire UserGroupQuestionnaire[]
+}
+
+model DesignTemplate {
+  id         String   @id @default(cuid())
+  name       String   @default("Untitled Template")
+  obj        Json
+  userId     String
+  user       User @relation(fields: [userId], references: [id])
+
+  Questionnaire Questionnaire[]
+}
+
+model UserGroup {
+  id    String  @id @default(cuid())
+  name  String
+
+  User User[]
+
+  UserRole UserRole[]
+
+  UserGroupQuestionnaire UserGroupQuestionnaire[]
+}
+
+model UserRole {
+  id        String     @id @default(cuid())
+  userId    String
+  user      User       @relation(fields: [userId], references: [id])
+  groupId   String
+  userGroup UserGroup @relation(fields: [groupId], references: [id])
+  role      Role
+}
+
+model UserGroupQuestionnaire {
+  id             String      @id @default(cuid())
+  userGroupId    String
+  userGroup      UserGroup   @relation(fields: [userGroupId], references: [id])
+  questionnaireId String
+  questionnaire   Questionnaire @relation(fields: [questionnaireId], references: [id])
 }

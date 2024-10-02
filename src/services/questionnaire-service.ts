@@ -43,7 +43,9 @@ export const findByUserWithoutObj = async (userId: string): Promise<any[]> => {
             name: true,
             status: true,
             createdAt: true,
-            modifiedAt: true
+            modifiedAt: true,
+            testUrl: true,
+            pubUrl: true
         }
     });
 };
