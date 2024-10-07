@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
 import { create, deleteById, findById, findByUser, updateById } from "../services/template-service.js";
 import { handleError } from "../utils/error-handler.js";
+import { deleteFiles } from '../services/upload-service.js';
 
 export const createTemplate = async (req: Request, res: Response) => {
     try {
         const { name, obj, userId } = req.body;
-        console.log('createTemplate:', name, obj, userId);
-
+        obj.obj.logoSrc = '';
         const newTemplate = await create({ name, obj, userId });
         res.status(201).json(newTemplate);
     } catch (error) {
@@ -18,6 +18,7 @@ export const updateTemplateById = async (req: Request, res: Response) => {
     try {
         const id = req.params.id;
         const { name, obj } = req.body;
+        obj.obj.logoSrc = '';
         const updatedTemplate = await updateById(id, { name, obj });
         res.status(200).json(updatedTemplate);
     } catch (error) {
@@ -31,6 +32,9 @@ export const deleteTemplateById = async (req: Request, res: Response) => {
         const id = req.params.id;
         await deleteById(id);
         res.status(204).end();
+        if (res.status(204).end()) {
+            deleteFiles(id);
+        }
     } catch (error) {
         handleError(error, res);
     }

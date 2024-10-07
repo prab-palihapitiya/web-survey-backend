@@ -58,6 +58,7 @@ export const updateById = async (id
     : string, templateData: {
         name: string;
         obj: any;
+        logo?: Buffer
     }
 ): Promise<DesignTemplate> => {
     const { name, obj } = templateData;
