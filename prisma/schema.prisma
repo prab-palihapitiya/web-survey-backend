@@ -63,8 +63,8 @@ model DesignTemplate {
   name       String   @default("Untitled Template")
   obj        Json
   userId     String
-  logoBuffer Bytes?
   user       User @relation(fields: [userId], references: [id])
+  createdAt  DateTime @default(now())
 
   Questionnaire Questionnaire[]
 }
